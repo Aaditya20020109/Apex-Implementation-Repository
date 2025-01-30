@@ -1,0 +1,119 @@
+ public static map<object , object>  GetData(string searchFor , string Parameter){
+        
+        system.debug('searchFor-->'+searchFor);
+        system.debug('Parameter-->'+Parameter);
+ 
+        
+        
+        // Create input for query operation
+        ConnectApi.CdpQueryInput queryInput = new ConnectApi.CdpQueryInput();
+        
+        
+        switch on Parameter {
+            when 'Address' {		
+                
+                
+                queryInput.sql =
+                    'SELECT * ' +
+                    'FROM UnifiedssotContactPointAddressDir1__dlm ' +
+                    'WHERE ssot__AddressLine1__c = \'' +
+                    searchFor +
+                    '\' ' ;
+                
+            }	
+            when 'UnifiedRecordId' {		
+                
+                queryInput.sql =
+                    'SELECT * ' +
+                    'FROM UnifiedssotIndividualDir1__dlm ' +
+                    'WHERE ssot__Id__c  = \'' +
+                    searchFor +
+                    '\' ' ;
+                
+            }
+            when 'Email' {	
+                
+                
+                queryInput.sql =
+                    'SELECT * ' +
+                    'FROM UnifiedssotContactPointEmailDir1__dlm ' +
+                    'WHERE ssot__EmailAddress__c = \'' +
+                    searchFor +
+                    '\' ' ;
+                
+            }
+            when else {		
+                
+                
+            }
+        }
+        
+        
+        
+        
+        
+        // Execute SQL
+        ConnectApi.CdpQueryOutputV2 response = ConnectApi.CdpQuery.queryAnsiSqlV2(
+            queryInput
+        );
+        Map<String, ConnectApi.CdpQueryMetadataItem> responseMetadata = new Map<String, ConnectApi.CdpQueryMetadataItem>();
+        
+        responseMetadata = response.metadata;
+        // Parse response
+        System.debug(
+            'Number of rows in the result data set ' + response.rowCount
+        );
+        System.debug('Next batch ID ' + response.nextBatchId);
+        System.debug('Query Metadata' + responseMetadata);
+        
+        string unifiedRecordId = '';
+        for (ConnectApi.CdpQueryV2Row resultRow : response.data) {
+            
+            
+            if(Parameter == 'Email')
+            {
+                unifiedRecordId  = resultRow.rowData[4].toString();
+                
+            }else if(Parameter == 'UnifiedRecordId')
+            {
+                unifiedRecordId  = resultRow.rowData[6].toString();
+                
+            }else{
+                
+                
+                unifiedRecordId  = resultRow.rowData[8].toString();
+                
+            }
+                
+                
+                
+                }	
+        
+        system.debug('unified Record Id --> ' + unifiedRecordId);
+        
+        list<object> ContactpointEmailData = Get_DC_Data.getContactEmailAddressData(unifiedRecordId);
+        SYSTEM.DEBUG('ContactpointEmailData'+ContactpointEmailData);
+        list<object> ContactpointAddressData = Get_DC_Data.getContactPointAddressData(unifiedRecordId);
+        SYSTEM.DEBUG('ContactpointAddressData'+ContactpointAddressData);
+        list<object> Individual = Get_DC_Data.getIndividualData(unifiedRecordId);
+        SYSTEM.DEBUG('Individual'+Individual);
+
+
+// first You Have to find Out the Index of Data in the Metadata.
+        map<object , object> returnData = new map<object  , object>();
+        returnData.put('Address' , ContactpointAddressData[0]);
+        returnData.put('PrefferedGlassType' , Individual[0]);
+        returnData.put('Prescription' , Individual[1] );
+        returnData.put('SpecsType' ,  Individual[2]);
+        returnData.put('Name' , Individual[5]);
+        returnData.put('UnifiedRecordId',Individual[6]);
+        returnData.put('Email' , ContactpointEmailData[1]);
+        
+        
+        
+        system.debug('RESULT ----------->'+returnData);
+        return returnData;
+        
+        
+    }
+    
