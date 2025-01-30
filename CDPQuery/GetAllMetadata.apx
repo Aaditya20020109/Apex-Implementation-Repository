@@ -1,0 +1,25 @@
+//CDPQuery and ConnectAPI Apex Implementation in Data cloud
+//https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_ConnectAPI_CdpQuery_static_methods.htm#apex_ConnectAPI_CdpQuery_getAllMetadata_1
+//Main Class Code
+
+
+
+
+public class CDPQuery_Practice {
+    
+    public static void getAllMetadataFromCDPQUERY()
+    {
+        try {
+            
+            ConnectApi.CdpQueryMetadataOutput response = ConnectApi.CdpQuery.getAllMetadata();
+            system.debug(response);
+
+        } catch (Exception e) {
+            System.debug('Error occurred: ' + e.getMessage());
+        }
+        
+        
+        
+    }
+    
+}
