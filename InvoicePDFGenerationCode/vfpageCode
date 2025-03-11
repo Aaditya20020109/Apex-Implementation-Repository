@@ -1,0 +1,135 @@
+<apex:page controller="BAGJUMP_Invoice_Controller" showHeader="false" sidebar="false" standardStylesheets="false">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 20px;
+                font-size: 14px;
+                background-color: #f9f9f9;
+            }
+            .container {
+                max-width: 800px;
+                margin: auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+            }
+            .header-left img {
+                max-width: 200px;
+            }
+            .header-right h1 {
+                margin: 0;
+                font-size: 24px;
+                color: #333;
+            }
+            .invoice-info, .customer-info {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            .invoice-info div, .customer-info div {
+                width: 48%;
+            }
+            .invoice-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .invoice-table th, .invoice-table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: left;
+            }
+            .invoice-table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            .total-due {
+                text-align: right;
+                font-size: 16px;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+            .footer {
+                text-align: center;
+                font-style: italic;
+                color: #777;
+                margin-top: 20px;
+                padding-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div class="header-left">
+                    <img src="https://getlogovector.com/wp-content/uploads/2020/07/bagjump-logo-vector.png" alt="Company Logo" />
+                </div>
+                <div class="header-right">
+                    <h1>INVOICE</h1>
+                </div>
+            </div>
+            <div class="invoice-info">
+                <div>
+                    <b>BILLED TO:</b>
+                    <p>
+                        {!customerName}<br />
+                        {!companyName}<br />
+                        {!streetAddress}<br />
+                        {!cityStateZip}<br />
+                        {!phone}
+                    </p>
+                </div>
+                <div style="text-align: right;">
+                    <p>INVOICE NO. - {!invoiceNumber}<br />
+                    {!invoiceDate}<br />
+                    CUSTOMER ID - {!customerId}</p>
+                </div>
+            </div>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!invoiceItems}" var="item">
+                        <tr>
+                            <td>{!item.productName}</td>
+                            <td>{!item.quantity}</td>
+                            <td>${!item.amount}</td>
+                            <td>${!item.total}</td>
+                        </tr>
+                    </apex:repeat>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><b>Total Due:</b></td>
+                        <td><b>${!totalDue}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="footer">
+                <p>Make all checks payable to Bagjump.</p>
+                <p>THANK YOU FOR YOUR BUSINESS!</p>
+                <hr />
+                <p>101 Copperwood Way, Suite E, Oceanside, CA 92058</p>
+                <p>(310) 625-1676 | usa@bagjump.com</p>
+            </div>
+        </div>
+    </body>
+    </html>
+</apex:page>
