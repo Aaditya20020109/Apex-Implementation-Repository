@@ -1,0 +1,55 @@
+public class BAGJUMP_Invoice_Controller {
+    
+    
+    public class InvoiceItem {
+        public String productName { get; set; }
+        public Integer quantity { get; set; }
+        public Decimal amount { get; set; }
+        public Decimal total { get { return quantity * amount; } }
+    }
+    
+    public String customerName { get; set; }
+    public String companyName { get; set; }
+    public String streetAddress { get; set; }
+    public String cityStateZip { get; set; }
+    public String phone { get; set; }
+    public String invoiceNumber { get; set; }
+    public Date invoiceDate { get; set; }
+    public String customerId { get; set; }
+    public List<InvoiceItem> invoiceItems { get; set; }
+    public Decimal totalDue { 
+        get {
+            Decimal sum = 0;
+            for (InvoiceItem item : invoiceItems) {
+                sum += item.total;
+            }
+            return sum;
+        }
+    }
+    
+    public BAGJUMP_Invoice_Controller() {
+        
+        customerName = 'John Doe';
+        companyName = 'ABC Corp';
+        streetAddress = '123 Main Street';
+        cityStateZip = 'New York, NY 10001';
+        phone = '(123) 456-7890';
+        invoiceNumber = '100';
+        invoiceDate = Date.today();
+        customerId = 'ABC12345';
+        
+      
+        InvoiceItem it = new InvoiceItem( );
+        it.productName = 'p1';
+        it.quantity = 2;
+        it.amount = 2342;
+        
+        system.debug('demo item -->' + it);
+        
+            
+            
+            
+            
+            }
+    
+}
